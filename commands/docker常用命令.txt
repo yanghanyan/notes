@@ -1,0 +1,87 @@
+docker学习笔记：
+
+	docker常用命令：
+		service docker start：启动docker
+		service docker stop：停止docker
+		service docker restart：重启docker
+		
+		镜像操作：
+			docker images：查看所有镜像
+			docker rmi xxx：删除xxx名字镜像
+			docker search xxx：搜索xxx镜像
+			docker pull xxx：拉取xxx镜像
+		
+		容器操作：
+			docker ps：查看运行中的容器
+			docker ps -a：查看所有容器
+			docker logs xxx：查看xxx容器日志
+			docker run xxx：运行xxx容器
+			docker start -i name：启动name容器
+			docker pause xxx：暂停xxx名字容器
+			docker unpause xxx：恢复xxx名字容器
+			docker stop xxx：停止xxx名字容器
+			docker tag aaa bbb：更改aaa容器名字为bbb
+			docker exec -it xxx bash：进入xxx容器交互界面
+			ctrl+d：退出容器且关闭
+			ctrl+p+q：退出容器但不关闭
+			docker rm xxx：删除xxx容器
+			
+			docker network create net1：创建net1网段
+			docker network inspect net1：查看net1网段
+			docker network rm net1：删除net1网段
+			
+		打包镜像：
+			docker save -o xxx.tar image：将image镜像打包为xxx.tar文件
+			docker save xxx > /home/xxx.tar.gz：导出xxx镜像到/home/xxx.tar.gz
+			docker load < /home/xxx.tar.gz：导入文件/home/xxx.tar.gz到镜像
+			
+		打包容器：
+			docker export container > xxx.tar：导出container容器到xxx.tar文件
+			docker export -o xxx.tar container：导出container容器到xxx.tar文件
+			docker import xxx.tar image：导入xxx.tar文件为image镜像
+		
+		docker卷：
+			docker volume create --name xxx：创建xxx卷
+			docker inspect xxx：查看xxx卷
+			docker volume rm xxx：删除xxx卷
+			
+		文件复制：
+			docker cp xxx.tar.gz container:/path：拷贝宿主机xxx.tar.gz文件到container名字容器的path路径下
+		
+		启动容器：
+			docker run -it -d --restart=always --name rename -p 9000:8080 -p 9001:8081 -v /home/workspace:/soft --privileged xxx bash
+				-d：创建出的容易在后台运行
+				-it：启动容器后开启进入容器交互页面
+				--name：给容器起个名字rename
+				-p：把真实宿主机9000端口映射到容器8080端口
+				bash：启动容器运行的是bash指令
+				-v：把宿主机目录/home/workspace映射到容器目录/soft，":"分隔
+				--privileged：映射文件最高权限，可以进行读写操作
+				--restart: 设置重启策略
+					--restart=no：默认策略，在容器退出时不重启容器
+					--restart=always：在容器退出时总是重启容器
+					--restart=on-failure:10：在容器非正常退出（退出状态非0）时重启容器，最多重启10次
+					--restart=unless-stopped：不管退出状态码是什么始终重启容器
+				
+		修改已运行容器：
+			修改端口映射：
+				/var/lib/docker/containers/[容器id全称]/hostconfig.json
+				更改端口映射规则，前面为容器端口，后面为宿主机端口：
+					"PortBindings":{"8080/tcp":[{"HostIp":"","HostPort":"8181"}]}
+					
+				
+		提交容器：
+			docker commit -a “yhy” -m “提交信息” c1abdc177915 yhy/gitlab:v1.0
+				-a “yhy”：创建镜像的作者名字
+				-m “提交信息”：提交信息
+				c1abdc177915：容器id
+				yhy/gitlab：生成的镜像名(yhy为dockerhub账号)
+				v1.0：镜像版本
+				
+			#注意：提交镜像一定要带上要push远程仓库的用户名，不然会报如下错误
+				errors:
+				denied: requested access to the resource is denied
+				unauthorized: authentication required
+				
+			docker login：登陆dockerhub账号
+			docker push yhy/gitlab:v1.0：推送到远程仓库

@@ -1,0 +1,228 @@
+Linux常用命令：
+
+	Linux目录结构：
+		/dev：存放抽象硬件
+		/boot：存放内核与启动文件
+		/lib：存放系统库文件
+		/bin：存放二进制文件(可执行命令)
+		/sbin：存放特权级二进制文件
+		/usr：存放安装程序(软件默认目录)
+		/var：存放经常变化的文件(系统日志、临时文件)
+		/mnt：文件挂载目录(U盘、光驱)
+		/home：普通用户目录
+		/root：特权用户目录
+		/etc：存放配置文件目录(已安装软件的配置)
+		/opt：大型软件存放目录(非强制)
+
+	sudo -i：获取root权限
+	sudo comand：以root身份运行命令
+
+	1、主机相关操作
+		1.1、查看主机：
+			hostname：查看主机名
+			uname -n：查看主机名
+			hostname -i：查看主机IP
+			cat /etc/redhat-release：查看centos版本
+			uname -r：查看当前的内核版本
+			 
+		1.2、修改主机名：
+			临时：
+				hostname xxx
+			永久：
+				vi /etc/hosts
+				vi /etc/hostname
+				
+				vi /etc/sysconfig/network	(Ubuntu实测无用)
+					NETWORKING=yes
+					HOSTNAME=yourname
+					
+		1.3、用户
+			adduser yhy 创建yhy用户
+			passwd yhy 设置yhy用户的密码
+			
+		1.4、查看Linux硬件
+			dmidecode -t processor | grep 'ID'：查看CPUID
+			dmidecode | grep 'Product Name'：查看服务器型号
+			dmidecode |grep 'Serial Number'：查看主板的序列号
+			dmidecode -s system-serial-number：查看系统序列号
+			dmidecode -t memory：查看内存信息
+			dmidecode -t 11：查看OEM信息
+			
+		1.5、端口
+			netstat -lnp|grep 80：查看80端口程序
+			ps -ef|grep xxx：查看xxx服务详细信息
+			netstat -antup |grep 2354：查看pid为2354服务详情
+			kill -9 2354：强迫杀死pid为2354服务进程
+
+	2、重启、关机命令：
+		2.1、重启：
+			reboot 
+			shutdown -r now 立刻重启
+			shutdown -r 10 过10分钟自动重启
+			shutdown -r 20:35 在时间为20:35时候重启
+		
+		2.1、关机：
+			halt   立刻关机（一般加-p 关闭电源）
+			poweroff 立刻关机 
+			shutdown -h now 立刻关机
+			shutdown -h 10 10分钟后自动关机 
+			shutdown -c 取消关机（必须是通过shutdown命令设置关机）
+		
+	3、防火墙：
+		Linux	--->	防火墙工具iptables
+		CentOS	--->	firewalld防火墙
+		Ubuntu	--->	防火墙工具ufw(基于iptables)
+		
+		3.1、Ubuntu：
+			apt-get install ufw	安装ufw防火墙(默认已安装)
+			ufw enable/disable 开启/关闭防火墙
+			ufw default deny 自启动
+			ufw status 查看防火墙状态
+			ufw allow 8080 允许8080端口
+			ufw delete allow 8080 禁用8080端口
+			ufw allow smtp 允许SMTP
+			ufw delete allow from 192.168.1.88 禁用IP
+			ufw logging on/off 开启/关闭防火墙日志
+		
+		3.2、CentOS：
+			firewalld-cmd --state 查看防火墙状态
+			service firewalld start 启动防火墙
+			service firewalld stop 停止防火墙
+			service firewalld restart 重启防火墙
+			firewalld-cmd --permanent --add-port=8080-8085/tcp 开放8080-8085端口
+			firewalld-cmd --permanent --remove-port=15672/tcp 禁用15672端口
+			firewalld-cmd --permanent --list-ports 查看开放的端口
+			firewalld-cmd --permanent --list-services 查看开放的程序
+			firewalld-cmd --reload	加载最新防火墙设置
+			
+			# 按一定范围开启端口，必须按设定范围关闭端口
+		
+	4、软件安装、卸载命令：
+		Ubuntu：
+			apt-get install xxx：安装xxx软件
+			apt-get remove xxx： 卸载xxx软件保留配置
+			apt-get --purge remove xxx:	卸载xxx软件及配置
+			
+		CentOS：
+			yum install xxx：安装xxx软件
+			yum remove xxx：卸载xxx软件
+		
+	5、文件夹操作命令：
+		ls -a：查看目录下所有文件（隐藏文件、文件夹）
+		find / -name xxx：查找xxx文件夹或文件
+		mkdir name：创建name文件夹
+		cd name：打开name文件夹
+		cp -r A B：递归复制目录A所有内容为目录B
+		mv -f A B：将目录A重命名为B(f：可选属性，强制覆盖已存在的目录或文件)
+		mv /a /b/c：将/a目录移动到/b下，并重命名为c
+		rm -rf A：删除目录A和属下文件(r：递归，f：无需删除确认)
+		ls：列出目录下内容
+		ll：列出目录下的内容详细属性(依次为：权限、创建该文件用户的名字、创建该文件用户所属组的名字、文件体积、时间、文件名)
+		du -sh xxx：查看xxx文件夹大小(统计单位)
+		
+	6、文件操作命令：
+		tar -xzvf xxx.tar.gz：解压xxx文件
+		touch hello.txt：创建hello.txt文件
+		echo helloworld > hello.txt：向hello.txt文件写入helloworld
+		cat hello.txt：在命令行输出hello.txt文件内容
+		cp hello.txt new.txt：复制hello.txt为new.txt
+		rm hello.txt：删除hello.txt文件
+		vi hello.txt:进入hello.txt编辑模式
+		tail -f:
+		
+		6.1、编辑模式
+			6.1.1、在命令模式中输入i a o：
+				a 在光标所在的字符后面插入
+				A 在光标所在的行尾插入
+				i 在光标所在的字符前进行插入
+				I 在光标所在的行首插入
+				o 在光标下插入新行
+				O 在光标上插入新行
+				
+			6.1.2、定位命令：
+				：set nu 设置行号
+				：set nonu 取消行号
+				gg 到第一行
+				G  到最后一行
+				nG 到第n行
+				：n 到第n行
+				$ 移至行尾
+				0 移至行首
+				
+			6.1.3、删除命令：
+				x 删除光标所在处的字符
+				nx 删除光标所在处后n个字符
+				dd 删除光标所在行，ndd删除n行
+				dG 删除光标的所在行到文件末尾内容
+				D  删除光标所在处到行尾内容
+				：n1，n2d 删除指定范围内的行
+				
+			6.1.4、复制和剪切命令：
+				yy 复制当前行
+				nyy复制当前行以下n行
+				dd 剪切当前行
+				ndd 剪切当前行以下的n行
+				p、P 粘贴在当前光标所在行下或行上
+				
+			6.1.5、搜索命令：
+				/string搜索指定字符串
+				搜索时忽略大小写：set ic
+				n 搜索指定字符串的下一个出现位置
+				:%s/old/new/g 全文替换指定字符串
+				:n1,n2s/old/new/g 在一定范围内替换指定字符串
+				
+			6.1.6、替换和取消命令：
+				r 取代光标所在处的字符
+				R 从光标所在处开始替换字符，按ESC结束
+				u 取消上一步操作
+				
+			6.1.7、保存和退出命令：
+				:w 保存修改
+				:w new_filename 另存为指定文件
+				:wq 保存修改并退出
+				ZZ 快捷键，保存修改并退出
+				:q! 不保存修改退出
+				:wq! 保存修改并退出(属于前者修改，在没有写的权限的时候，只有文件的所有者以及root可以使用)
+
+	7、文件、文件夹权限：(共10个字符：-rwxrwxrwx)
+		第1个字母表示类型：
+			-：文件
+			d：目录
+			l：链接
+			b：存储设备 ---> 移动硬盘
+			c：串行设备 ---> 鼠标、键盘
+			
+		第2~4个字母(属主权限)：表示该文件所属用户所拥有的权限：
+		第5~7个字母(属组权限)：表示该文件所属用户所在组用户所拥有的权限：
+		第8~10个字母(其他用户权限)：表示该文件所属用户组外其它用户组所拥有的权限：
+			r：读的权限	---> 4(用于更改权限计算)
+			w：写的权限	---> 2
+			x：执行的权限 ---> 1
+			-：缺少权限	---> 0
+			
+		修改权限：
+			chmod 700 hello.txt		--->	-rwx------
+			解释：700三个数字分别对应三组权限，每个数字是所对应组权限之和
+			
+	8、打包、压缩、解压：
+		8.1、.tar：
+			tar cvf xxx.tar xxx：将xxx目录/文件打包成xxx.tar
+			tar xvf xxx.tar /xxx：将xxx.tar解包xxx目录下(不填目录默认为当前目录)
+			
+		8.2、.gz
+			tar zcvf xxx.tar.gz xxx：将xxx目录/文件压缩成xxx.tar.gz
+			tar zxvf xxx.tar.gz /xxx：将xxx.tar.gz解压到xxx目录下(/xxx不填默认为当前目录)
+			
+		8.3、.tgz：
+			tar zcvf xxx.tar.tgz xxx：将xxx文件压缩成xxx.tar.tgz
+			tar zxvf xxx.tar.tgz /xxx：将xxx.tar.tgz解压到xxx下(xxx需存在)
+		
+		8.4、.zip：
+			zip xxx.zip xxx：将xxx文件(目录要加上-r递归压缩)压缩成xxx.zip
+			unzip xxx.zip -d /xxx：将xxx.zip解压到xxx下(不加-d /xxx默认为当前目录)
+		
+		8.5、.rar：
+			rar a xxx.rar /xxx：将xxx文件压缩成xxx.rar
+			rar x xxx.rar：将xxx.rar解压
+			unrar e xxx.rar：将xxx.rar解压
+		
