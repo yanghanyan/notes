@@ -1,0 +1,139 @@
+jQuery：
+
+	1、jQuery概述：
+		jQuery是一个快速、简洁的JavaScript框架，是继Prototype之后又一个优秀的JavaScript代码库（或JavaScript框架）。
+		jQuery设计的宗旨是“write Less，Do More”，即倡导写更少的代码，做更多的事情。
+		它封装JavaScript常用的功能代码，提供一种简便的JavaScript设计模式，优化HTML文档操作、事件处理、动画设计和Ajax交互。
+		
+	2、jQuery入门：
+		官网：http://jquery.com/
+		最新版本: 3.4.1
+		文件下载：
+			下载压缩的生产jQuery 3.4.1		--->	jquery-3.4.1.min.js		--->	适合于生产环境
+			下载未压缩的开发jQuery 3.4.1	--->	jquery-3.4.1.js			--->	适合调试查看源码
+			下载jQuery 3.4.1的映射文件		--->	jquery3.4.1_api.chm
+			
+	3、jQuery核心函数
+		$ = jQuery
+		jQuery源码：window.jQuery = window.$ = jQuery;
+		
+		3.1、jQuery(callback)
+			在DOM加载完成后执行一个指定的function函数
+			$(function() {
+				alert("hello world");
+			})
+		
+		3.2、jQuery(html,[ownerDocument])
+			将一个DOM对象/HTML代码包装成jQuery对象，第二参数可选，用于设置DOM对象的相关属性
+			$("<span></span>")
+			
+		3.3、jQuery([selector,[context]])
+			用于在页面上查找，根据css选择器，第二个参数可选，指定要查找的DOM集
+		
+		3.4、jQuery对象和DOM对象相互转换
+			jQuery.get(0)	===>	dom
+			$(dom)			===>	jQuery
+			
+	4、jQuery选择器
+		4.1、基本选择器
+			#id :id选择器 // $("#d1")
+			element :元素选择器 // $("div")
+			.class :类选择器 // $(".class1")
+			* :匹配所有元素 // $("*")
+			select1,select2... :将每一个选择器匹配到的元素合并后一起返回 // $(".d,#d1")
+		
+		4.2、层级选择器
+			根据元素的关系来获取，关系：父子、兄弟
+			4.2.1、 空格：
+				得到元素下的所有子元素，包括子元素的子元素
+				$("#d a")
+			4.2.2、>大于号：
+				只获取直接的子元素
+				$("#d>a")
+			4.2.3、+加号：
+				只获取直接的一个兄弟元素
+				$("#d+a")
+			4.2.4、~波浪线：
+				所有后面的兄弟元素
+				$("#d~a")
+		
+		4.3、过滤器
+			过滤器是在基本选择器和层级选择器获取到一批元素后，再进行过滤操作
+			除了属性过滤选择器，都是":"开头
+			
+			4.3.1、基本过滤选择器
+				$("div:first"):获取第一个div元素
+				$("div:not(div:first)"):获取不是第一个div的其它元素
+				$("div:gt(0)"):获取索引值大于0的元素
+				$("div:even"):匹配索引值为偶数的元素
+				$("div:odd"):匹配索引值为基数的元素
+				$(":header"):匹配<h1><h2>...类的元素
+			
+			4.3.2、内容过滤选择器
+				根据元素内部文本内容进行选中操作的
+				
+				$("div:contains('JS')"):匹配div中文本内容为JS的元素
+				$("div:empty"):匹配div为空的元素
+				$("div:has(a)"):匹配div中含有<a>标签的元素
+				$("div:parent"):匹配含有子元素div的元素
+			
+			4.3.3、可见性过滤选择器
+				匹配display:none的元素和<input type="hidden"/>的表单元素
+				
+				$("div:hidden"):获取div中隐藏的元素
+				$("div:visible"):获取div中显示的元素
+			
+			4.3.4、属性过滤选择器
+				根据属性过滤选择器
+				$("div[id]"):获取div中含有Id属性的元素
+				$("name='username'"):获取name=username的元素
+				$("input[type='checkbox']"):获取input中的多选框
+				input[id][type='checkbox']:组合使用
+				^= 匹配开始
+				$= 匹配结尾
+				*= 匹配包含
+			
+			4.3.5、子元素过滤选择器
+				根据子元素顺序来获取
+				$("ul li:nth-child(2)"):获取ul下第二个li子元素，序号是从1开始，也可以设置old/even奇偶，也可以设置倍数3n/3n+1
+				$("ul li:first-child"):获取ul下第一个li子元素
+				$("ul li:last-child"):获取ul下最后一个li子元素
+				$("ul li:only-child"):获取ul下唯一的li子元素
+			
+			4.3.6、表单过滤选择器
+				用于帮助我们选取表单中的元素
+				$(":text,:password"):获取文本库和密码框元素对象
+				$(":button"):获取按钮元素对象
+			
+			4.3.7、表单对象过滤选择器
+				$(":input:enabled/disabled"):匹配所有可用/不可用元素
+				$(":radio:checked"):匹配单选框选中的元素
+				$(":checkbox:checked"):匹配多选框选中的元素
+				$("select option:selected"):匹配select元素下option选中的元素
+			
+	#、常用方法：
+		html() :获取元素中HTML代码
+		html(xxx) :设置元素的HTML信息
+		text() :获取元素中的文本信息
+		text(xxx) :设置元素的文本信息
+		trim() :去掉字符串左右空格
+		index() :判断元素序号
+		size() :某个元素在集合中的索引
+		each(function(index, [obj]){}) :
+			遍历一个集合，传递一个function函数作为参数，每次遍历都会执行function函数
+			index :遍历的索引，从0开始
+			obj :可选参数，表示每次遍历得到的DOM对象
+		
+		val() :获取当前元素的value值
+		show() :让元素显示出来，可指定参数“fast/slow”来控制显示速度
+		hide() :让元素隐藏起来，可指定参数“fast/slow”来控制隐藏速度
+		attr("name", "bob") :传参一个，获取对应属性值，传参多个，设置对应属性值
+		
+	#、常用事件
+		失去焦点事件：
+			blur(function(){});//当失去焦点，会触发传递的function函数；
+		单击事件：
+			click(function(){});//当单击时，会触发传递的function函数；
+		提交表单：
+			submit()//提交表单；
+			submit(function(){return false;});//阻止提交表单

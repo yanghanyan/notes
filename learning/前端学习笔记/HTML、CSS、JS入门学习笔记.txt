@@ -1,0 +1,438 @@
+HTML：
+
+	1、HTML概述：
+		超文本标记语言，用来写网页，是设计网页的基础。
+		
+	2、HTML语言特征：
+		HTML文件扩展名为html
+		HTML文件由浏览器直接解析执行，无需编译，从上到下依次解析执行
+		HTML标签由开始标签和结束标签组成，除没有内容体的空标签。 // <br/>
+		HTML标签不区分大小写，为方便阅读，建议使用小写
+		HTML标签是有属性的 // 属性名="属性值"
+		HTML标签简易包裹嵌套，不建议交叉嵌套
+		
+	3、HTML基本标签
+		3.1、字体标签：用于修饰展示的文字样式
+			<font color="字体颜色" size="字体大小1~7" face="字体类型"></font>
+		
+		3.2、格式化标签：
+			换行标签：<br/>
+			标题标签：<h1></h1>,<h2></h2>...
+			段落标签：<p align="对齐方式 left、center、right"></p>
+			空格符号：&nbsp;&nbsp;&nbsp;&nbsp;
+			注释：<!-- 注释内容 --> 只能在源码中看见，页面展示效果中看不见
+			
+		3.3、图片标签：
+			<img src="图片路径" width="图片宽度,单位px像素/百分比" height="图片高度，单位px像素/百分比"/>
+			
+		3.4、列表标签：
+			无序列表：<ul></ul>
+			有序列表：<ol></ol>
+			列表条目：<li></li>
+			
+		3.5、超链接标签：
+			<a href="跳转路径，默认跳本页">点击我</a>
+			
+		3.6、表格标签：
+			定义一个表格：<table border="边框粗细" width="边框宽度"></table>
+			定义表格一行：<tr></tr>
+			表头单元格：<th></th> // 只能写在<tr>中，内容默认居中加粗
+			普通单元格：<td></td> // 只能写在<tr>中
+			单元格合并：
+				<td colspan="2" rowspan="2"> 跨行跨列合并两个单元格
+				colspan：跨列合并单元格
+				rowspan：跨行合并单元格
+		3.7、块标签：
+			行级块标签：<span></span> // 有多少内容就占多大地方，适合少量内容展示
+			块级块标签：<div></div> // 默认占满一行，适用于大量数据展示
+			
+		3.8、表单标签：
+			把用户输入的数据提交到后台服务器，是前台页面跟服务器之间的桥梁，是web程序的入口。
+			定义表单：<form action="" method=""></form>
+				action：将数据提交到何处，默认提交到本页面
+				method：将数据以何种请求方式提交
+					get方式提交：参数直接拼接到地址后面，提交数据量有上限，不安全
+					post方式提交：参数放在请求体中，无数据限制，相对安全
+			
+			3.8.1、输入项标签：
+				<input name="radio" value="radio" checked="checked" type="radio"/>
+				name：单选框、复选框进行数据的分组，相同名字为同一组
+				value：该标签对应的参数值、按钮的名字
+				checked：设置单选框/复选框默认选中状态
+				readonly：该标签只读，用户无法手动修改，数据会正常提交
+				disabled：该标签不可用，数据不会提交
+				type:设置该标签的种类，有如下值：
+					text :文本框，默认
+					password :密码框，内容非明文
+					radio :单选框，在同一组内有效
+					checkbox :复选框，在同一组内有效
+					file :附件框，用于文件上传
+					reset :重置按钮，将表单输入项恢复到未输入状态
+					button :普通按钮
+					submit :提交按钮
+					hidden :隐藏域，用户看不到，数据会被提交
+			
+			3.8.2、选择框标签：
+				选择框标签：<select name="设置参数名" multiple="展示全部选项，并可以多选"></select>
+				选项标签：<option value="设置需要提交的参数值" selected="selected设置默认选中"></option>
+				
+			3.8.3、文本域标签：
+				<textarea name="参数名"></textarea> // 用户场景：个人简介、个性签名
+			
+			3.8.4、表单提交注意事项
+				URL编码：转译特殊符号、中文，保证数据完整性
+				①、进行普通的编码，编码成字节数组
+				②、把字节数组中的每一个10进制元素转为16进制
+				③、使用%拼接16进制元素
+					&	--->	%26
+	
+	
+CSS:
+
+	1、CSS概述：
+		CSS(cascading style sheets)：层叠样式表，修饰HTML页面，更美观的展示超文本信息
+		
+	2、CSS代码规范：
+		放置：在<style>标签内写CSS样式代码，<style>标签放置在<head>标签中
+		格式：选择器名称 {属性名1:属性值1; 属性名2:属性值2; ...}
+			选择器：即指定CSS代码作用在哪些HTML标签上
+		代码：属性名和属性值之间是键值对关系
+			  属性名和属性值用“:”连接，“;”结尾
+			  多个属性值之间用“ ”隔开
+			  注释：/* 注释内容*/
+			  
+	3、CSS选择器：
+		3.1、基本选择器
+			3.1.1、元素选择器：
+				以HTML标签名作为选择器名称，将相同样式作用在多个同名标签上
+				格式：
+					标签名 {}
+			3.1.2、类选择器：
+				以便签class属性值作为选择器名称，将相同样式作用在多个相同类名标签上
+				格式：
+					.类名 {}
+			3.1.3、id选择器：
+				以HTML id属性值作为选择器名称，将样式作用在某个标签上，必须保证id值在本页面唯一
+				格式：
+					#id值 {}
+		
+		3.2、CSS选择器组合方式
+			层级关系：可以对基本选择器进行组合，表现出层级关系，从来更加针对性的吧样式作用于某些标签上
+			格式：
+				选择器1 选择器2 ... {}
+			释义：
+				选择器1 下的 选择器2 下的元素使用相同的样式
+				
+	4、CSS边框的属性：
+		所有的HTML标签都有边框，只是默认不可见
+		格式：宽度 样式 颜色	// border:1px solid red
+		线条样式：solid 实线、none 无边、double 双线
+		宽度：width
+		高度：height
+		标签背景颜色：background-color
+			英文单词设置背景：red、blue
+			颜色代码设置背景：#ff1100
+			
+	5、CSS布局：
+		5.1、浮动(float)
+			默认排版方式是从上到下依次罗列，而需要左右方式排版就需要用到浮动属性
+			格式：
+				选择器 {float:属性值}
+				属性值：
+					none：不浮动(默认值)
+					left：元素向左浮动
+					right：元素向右浮动
+				注意：
+					元素浮动后会改变页面原有的结构，从而影响其他元素的排版，所以需要重新调整
+		
+		5.2、转换(display)
+			可以使得元素在行内元素和块级元素之间相互转换
+			行内元素：不会自动换行，多少内容占多大空间
+				<span>、<a>
+			块元素：会自动换行，占一整行
+				<h1>、<p>、<div>、<ul>
+			格式：
+				选择器 {display:属性值}
+				属性值：
+					block：将此元素显示为块元素（块元素的display默认属性）
+					inline：将此元素显示为行内元素（行内元素的display默认属性）
+					none：次元素将被隐藏，不占用空间
+					
+	6、CSS字体：
+		font-size：设置字体大小
+		color：设置字体颜色
+		
+	7、CSS盒子模型：
+		概述：
+			也指框模型 (Box Model)，规定了元素框处理元素内容、内边距、边框和外边距的样式方式。
+		
+		边框：
+			border-top :上边框
+			border-bottom :下边框
+			border-left :左边框
+			border-right :右边框
+			border :通用性设置边框
+			
+		内边距：
+			HTML元素里的内容体到HTML元素边框的距离
+			padding-top :上内边距
+			padding-bottom :下内边距
+			padding-left :左内边距
+			padding-right :右内边距
+			padding :通用性设置内边距
+			
+		外边距：
+			HTML元素边框到另一个HTML元素边框的距离
+			margin-top :上外边距
+			margin-bottom :下外边距
+			margin-left :左外边距
+			margin-right :右外边距
+			margin :通用性设置外边距
+			
+	8、CSS样式和HTML结合方式：
+		8.1、内部样式：
+			行内样式:
+				通过标签的style属性来设置元素的样式
+				<h1 style="color: red; font-size: 100px"></h1>
+			
+			<style>标签的方式：
+				当某些样式在页面多个标签中重复使用，我们可以将样式代码从标签style属性中抽离出来，统一写到<head>标签内的<style>标签中
+			
+		8.2、外部样式：
+			<link>标签的方式:
+				将所有的样式代码都放入到一个或多个.css为扩展名的外部样式文件中，并通过<link>标签链入到HTML文档中
+				<link rel="stylesheet"/*固定值，表示样式表*/ type="text/css"/*固定值，表示css类型*/ href="CSS文件路径" />
+
+
+JavaScript：
+
+	HTML	--->	页面的结构		--->	人的身体
+	CSS		--->	美化页面		--->	人的衣服
+	JS		--->	控制页面特效	--->	人的大脑、灵魂
+
+	1、JavaScript概述：
+		是一种脚本语言（不能独立运行，必须嵌入到其他语言中执行，JavaScript是被浏览器解析执行的，不需要编译）
+		可以修改css样式、校验浏览器表单、控制页面效果等等
+		不需要经过编译，从上到下依次加载执行
+
+	2、JavaScript组成：
+		ECMAScript：核心，封装了JavaScript语法和基本对象
+		DOM:文档对象模型，操作HTML元素
+		BOM:浏览器对象模型，操作浏览器，比如地址栏、浏览器放大、缩小
+		
+	3、JavaScript引入方式：
+		文件内部引入：
+			<script>
+				var a = 10;
+				var b = 20;
+			<script/>
+		文件外部引入：
+			<script src="index.js"/>
+			
+		#注意：script标签引用了src属性后，在该标签内的js代码会被src所引用的js文件覆盖不会执行
+		
+	4、JavaScript变量命名规则：
+		必须字母、下划线开头
+		不能包含空格
+		不能使用关键字
+		严格区分大小写
+		
+	5、JavaScript数据类型：
+		基本数据类型（原始类型）：
+			string：字符串类型，不区分单双引号
+			number：数字类型，不区分整数、浮点
+			boolean：true、false
+			null：空值
+			undefined：未定义类型，值为undefined
+			
+		引用数据类型（对象）：
+			Object: String,Number,Boolean
+			Function:
+			创建对象：var object = new Object();
+			
+	6、JavaScript运算符：
+		比较运算符：
+			大部分相同，不同的==与===
+			==：只会比较变量值，只要值相同就返回true。 8=="8"  ----> true
+			===：会比较变量值和变量类型，同时满足条件才会返回true。	 8==="8"  ----> false
+			
+		逻辑运算符（只有三种）：
+			&&：and，有短路效果，前面为false后面不执行
+			||：or，有短路效果，前面为true后面不执行
+			！：not，非，取反
+			
+		算术运算符：
+			注意一点："/"不是取整，会得到小数
+
+	7、JavaScript正则对象：
+		// 直接量方式创建正则对象，必须全部符合才返回true
+		var reg = /^\s*$/;
+		alert(reg.test(" a "));
+		// 普通方式创建正则对象,除非全部不符合才返回false
+		var reg = /\s*/;
+		alert(reg.test(" a "));
+
+	8、JavaScript数组：
+		js数组的四种创建方式（推荐前两种）：
+			var arr = [1, "2", true];
+			var arr = new Array();
+			var arr = new Array(2);
+			var arr = new Array(1, "2");
+
+		常用属性：
+			// 返回数组长度
+			arr.length;
+
+		常用方法：
+			// 以string参数拼接数组元素
+			arr.join("~");
+			// 删除、并返回最后一个元素
+			arr.pop();
+			// 向数组末尾添加一个或多个元素
+			arr.push(false);
+			arr.push("e", "f");
+	
+	9、全局函数
+		// 可以把传入字符串作为js代码执行
+		// *注意：只能传递基本数据类型的字符串，而不能传入字符串对象
+		eval("var x = 10");
+		
+		// 编码、解码URL
+		encodeURI("");
+		decodeURI("");
+
+		// 字符串转数字、浮点数
+		var num = parseInt("10.55"); // 10
+		var num2 = parseFloat("10.55"); // 10.55
+		var num3 = parseFloat("10.5a5"); // 10.5
+		var num4 = parseFloat("a10.55"); // NaN
+
+		#注意：NaN(Not a Number): 不是一个数字，是一个数字类型的标识，表示不是一个正确的数字
+			
+	10、自定义函数
+		格式：
+			function 函数名(参数列表){
+				函数体
+			}
+			
+		规则：
+			函数定义的function必须小写
+			返回值、参数列表不需要使用var修饰
+		
+		使用：
+			var 函数返回值 = 函数名(参数列表)；
+			
+		注意：
+			JavaScript函数调用执行完毕一定有返回值，如果函数没有return，则返回值为undefined
+			JavaScript函数若同名，不存在函数的重载，会覆盖上面的函数，如果形参未赋值，则使用默认值undefined
+			
+	11、自定义对象
+		格式：
+			// 定义方式
+			function 对象名(参数a, 参数b){
+				this.属性名 = ""; // 定义属性并赋值
+				this.属性名 = 参数a;	// 构造对属性赋值
+			}
+			
+			// 直接量方式
+			var 对象名 = {属性名1:"属性值1", 属性名2:"属性值2"};
+			
+		使用：
+			var v = new 对象名();
+			v.属性名;	// 取属性值
+			v.属性名 = ""; // 存属性值
+			v.新属性名 = ""; // 声明新属性并赋值
+			
+	12、BOM对象
+		BOM(browser object model)浏览器对象模型，用来执行浏览器的相关操作。
+		
+		消息框：
+			alert(); // 警告框：提示、告警用户信息
+			var flag = confirm("是否删除"); // 确认框：告知用户信息并收集用户选择信息
+			
+		定时器：
+			循环定时器：
+				设值：
+					var id = setInterval(调用方法, 毫秒值); // 每多少秒调用方法
+				取消：
+					clearInterval(id);
+			
+			一次性定时器：
+				设值：
+					var id = setTimeout(调用方法, 毫秒值); // 多少秒执行一次定时器
+				取消：
+					clearTimeout(id);
+					
+		location对象：
+			location.herf; // 获取浏览器地址URL
+			location.herf = ""; // 设置herf属性，会跳转到设置路径
+		
+	13、DOM对象
+		DOM(document object model)文档对象模型，操作标记型文档（HTML等）的标签、文本、属性，使页面更美观。
+		
+		HTML文档会被浏览器由上到下依次加载到浏览器的内存形成DOM树并解析。
+		一个HTML文档加载形成一个DOM对象叫document
+		标签		----->		元素节点对象
+		标签属性	----->		属性节点对象
+		标签内容	----->		文本节点对象
+		
+		DOM树特点：
+			必定会有一个根节点、元素
+			每个节点都是节点对象
+			父子、兄弟节点关系，每个节点都有一个父节点，0~n个子节点
+			根节点没有父节点，文本节点没有子节点
+			
+		获取元素对象的四种方式：
+			document.getElementById(); // 通过元素id获取元素对象，不存在返回null
+			document.getElementsByName(); // 通过元素的name属性获取符合要求的所有元素的数组，不存在返回空数组
+			document.getElementsByTagName(); // 通过元素的标签名获取符合要求的所有元素的数组，不存在返回空数组
+			document.getElementsByClassName(); // 通过元素的class属性获取符合要求的所有元素的数组，不存在返回空数组
+			
+		#注意：获取某个/某些元素节点对象，必须保证该元素节点对象被加载到内存中。
+		
+	14、元素对象常见属性
+		value、className、checked(更改单选/复选选中状态)、innerHtml(更改元素对象内容体)：
+		元素对象.属性 // 获取元素对象属性值  例如：元素对象.value、元素对象.className
+		元素对象.属性=新值 // 设置元素对象属性值  例如：元素对象.value=””、元素对象.className=””
+		
+	15、JS事件
+		鼠标或热键的动作我们称之为事件（event），比如点击、表单提交、值变化，鼠标移入、移出。
+		
+	16、JS事件驱动机制
+		<input id="id" type="button" value="发起投降" onclick="run()"/>
+		<script>
+			function run() {
+				alert("点了")
+			}
+		</script>
+		
+		事件源：(button)专门产生事件的组件
+		事件：(onclick)由事件源产生的动作或者事件
+		监听器：(run())专门处理事件源所产生的事件
+		注册/绑定监听器：(onclick="run()")让监听器时刻监听事件源是否产生指定事件，如果产生，则调用监听器处理
+		
+	17、常见JS事件
+		点击事件(onclick)：由鼠标或热键点击元素组件时触发
+		焦点事件(onblur、onfoucs)：既整个页面的注意力，一个页面只有一个焦点
+			获取焦点事件(onfoucs)：当元素组件获取焦点时触发
+			获取焦点事件(onblur)：当元素组件获取焦点时触发
+		域内容改变事件(onchange)：
+		加载完毕事件(onload)：
+		表单提交事件(onsubmit)：表单的提交按钮被点击时触发，事件得到true允许提交，false阻止提交。
+		键位弹起事件(onkeyup)：
+		鼠标事件：
+			鼠标移入事件(onmouseover)：
+			鼠标移出事件(onmouseout)：
+			
+	18、JS事件的绑定方式
+		元素事件句柄绑定：将事件以元素属性的方式写到标签内部，进而绑定对应函数
+			<input type="text" value="demo" onclick="method()" />
+			缺点：JS和HTML代码高度糅合在一起，不利于项目开发维护
+			
+		DOM绑定方式：使用DOM属性的方法绑定事件，对象.事件
+			window.onload = method; // 不能传递参数，只能绑定一个事件
+			window.onload = function(){	// 匿名函数可以传参、绑定多个事件
+				method1();
+				method2();
+			}
+		
