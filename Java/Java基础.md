@@ -1045,11 +1045,80 @@ public T newInstance() throws InstantiationException, IllegalAccessException {}
 - **< ? super T>**：它通过确保类型必须是T的父类来设定类型的下界。
 
 ## 4、非限定通配符
-- **<?>**：可以用任意类型来代替
+**<?>**：可以用任意类型来代替
+
+- [10 道 Java 泛型面试题](https://cloud.tencent.com/developer/article/1033693)
 
 
 十一、异常
 =================
+
+## 1、概述
+　　不正常，程序在编译或者运行时出现的错误就是异常。
+
+　　在Java中，把异常信息封装成了一个类。当出现了问题时，就会创建异常类对象并抛出异常相关的信息（如异常出现的位置、原因等），使用Exception类来描述异常。
+
+## 2、异常体系
+```
+Throwable
+	|-Error：严重的错误，程序无法处理的，比如服务器宕机，数据库崩溃，内存溢出
+	|-Exception：非严重的错误，可以处理的
+		|—编译时异常：Exception下所有的除了RuntimeException及其子类之外的所有的异常
+		|—运行时异常：Exception下包含RuntimeException及其子类
+```
+
+## 3、处理异常
+### 3.1、默认抛出(throws)
+　　throws用于抛出异常类名，使用在方法声明上；throws可以抛出多个异常，多个之间用逗号分隔。
+
+- **格式**：
+```java
+修饰符 返回值类型 方法名(参数列表) throws 异常类名{}
+```
+
+### 3.2、捕获异常(try...catch...)
+　　catch块可以没有，也可以有多个；多个catch块最多只会执行一个，异常必须按照从小到大排列。finally表示最终，一定会执行的语句块，常常用于释放资源。
+
+- **格式**：
+```java
+  try {
+
+  } catch (异常类型 变量名) {
+
+  } finally {
+
+  }
+  ```
+
+- **finally不执行原因**：
+  - 当有退出JVM的语句时：System.exit(0);
+  - finally代码块中有异常时
+
+## 4、throw和throws的区别
+- throws它是异常处理的方式之一，在方法声明上面使用，抛出的是异常类名，可以抛出多个，多个之间用逗号隔开。
+- throw它是制造异常的方式，在方法内部使用，抛出的是异常对象，一个throw只能抛出一个异常对象。
+
+## 5、自定义异常
+　　自定义一个类继承Exception或者RuntimeException即可。
+```java
+public class MallException extends Exception {
+
+    private String code;
+    private String msg;
+    private Object data;
+    private ExceptionEnum exceptionEnum;
+
+    public MallException() {
+    }
+
+    public MallException(ExceptionEnum exceptionEnum) {
+        this.code = exceptionEnum.getCode();
+        this.msg = exceptionEnum.getMsg();
+        this.exceptionEnum = exceptionEnum;
+    }
+}
+```
+
 
 十二、Object 通用方法
 =================
