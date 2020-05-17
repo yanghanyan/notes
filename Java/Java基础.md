@@ -109,7 +109,25 @@
   * [3、限定通配符](#3限定通配符)
   * [4、非限定通配符](#4非限定通配符)
 - [十一、异常](#十一异常)
+  * [1、概述](#1概述)
+  * [2、异常体系](#2异常体系)
+  * [3、处理异常](#3处理异常)
+    + [3.1、默认抛出(throws)](#31默认抛出(throws))
+    + [3.2、捕获异常(try...catch...)](#32捕获异常(try...catch...))
+  * [4、throw和throws的区别](#4throw和throws的区别)
+  * [5、自定义异常](#5自定义异常)
 - [十二、Object 通用方法](#十二Object-通用方法)
+  * [1、概览](#1概览)
+  * [2、hashCode()](#2hashCode--)
+  * [3、equals()](#3equals--)
+  * [4、clone()](#4clone--)
+    + [4.1、浅拷贝](#41浅拷贝)
+    + [4.2、深拷贝](#42深拷贝)
+    + [4.3、clone()的替代方案](#43clone--的替代方案)
+  * [5、toString()](#5tostring--)
+  * [6、notify()](#6notify--)
+  * [7、wait()](#7wait--)
+  * [8、finalize()](#8finalize--)
 - [十三、注解](#十三注解)
 - [参考资料](#参考资料)
 <!-- GFM-TOC -->
@@ -1122,6 +1140,224 @@ public class MallException extends Exception {
 
 十二、Object 通用方法
 =================
+
+## 1、概览
+　　**Object类是Java语言中的根类，即所有类的父类**。它描述的所有方法子类都可以使用。
+
+```java
+public final native Class<?> getClass();
+
+public native int hashCode();
+
+public boolean equals(Object obj) {
+    return (this == obj);
+}
+
+protected native Object clone() throws CloneNotSupportedException;
+
+public String toString() {
+    return getClass().getName() + "@" + Integer.toHexString(hashCode());
+}
+
+public final native void notify();
+
+public final native void notifyAll();
+
+public final native void wait(long timeout) throws InterruptedException;
+
+protected void finalize() throws Throwable { }
+```
+
+## 2、hashCode()
+　　hashCode() 返回哈希值
+
+　　HashSet 和 HashMap 等集合类使用了 hashCode() 方法来计算对象应该存储的位置，因此要将对象添加到这些集合类中，需要让对应的类实现 hashCode() 方法。
+
+```java
+public int hashCode() {
+    int result = 1;
+    Object name = this.getName();
+    result = result * 59 + (name == null ? 43 : name.hashCode());
+    Object age = this.getAge();
+    result = result * 59 + (age == null ? 43 : age.hashCode());
+    return result;
+}
+```
+
+## 3、equals()
+　　equals() 是用来判断两个对象是否等价。等价的两个对象散列值一定相同，但是散列值相同的两个对象不一定等价，这是因为计算哈希值具有随机性，两个值不同的对象可能计算出相同的哈希值。
+
+　　两个对象具有等价关系，需要满足以下五个条件：
+- **自反性**
+```java
+x.equals(x); // true
+```
+
+- **对称性**
+```java
+x.equals(y) == y.equals(x); // true
+```
+
+- **传递性**
+```java
+if (x.equals(y) && y.equals(z))
+    x.equals(z); // true;
+```
+
+- **一致性**
+多次调用 equals() 方法结果不变
+```java
+x.equals(y) == x.equals(y); // true
+```
+
+- **与 null 的比较**
+对任何不是 null 的对象 x 调用 x.equals(null) 结果都为 false
+```java
+x.equals(null); // false;
+```
+
+　　**在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证等价的两个对象哈希值也相等**。
+```java
+public boolean equals(final Object o) {
+    if (o == this) {
+        return true;
+    } else if (!(o instanceof User)) {
+        return false;
+    } else {
+        User other = (User)o;
+        if (!other.canEqual(this)) {
+            return false;
+        } else {
+            Object thisName = this.getName();
+            Object otherName = other.getName();
+            if (thisName == null) {
+                return otherName == null;
+            } else if (!thisName.equals(otherName)) {
+                return false;
+            }
+
+            Object thisAge = this.getAge();
+            Object otherAge = other.getAge();
+            if (thisAge == null) {
+                return otherAge == null;
+            } else return thisAge.equals(otherAge);
+        }
+    }
+}
+
+protected boolean canEqual(final Object other) {
+    return other instanceof User;
+}
+```
+
+## 4、clone()
+　　clone() 可见范围是 protected 的 Object 方法，一个类不显式去重写 clone()，其它类就不能直接去调用该类实例的 clone() 方法。所以实体类使用克隆的前提是：
+- **实现Cloneable接口，这是一个标记接口，自身没有方法**
+- **覆盖clone()方法，可见性提升为public**
+
+```java
+public class Cert {
+
+    private int no;
+
+    public Cert(int no) {
+        this.no = no;
+    }
+}
+
+public class User implements Cloneable {
+
+    private String name;
+    private Integer age;
+    private Cert cert;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+```
+
+### 4.1、浅拷贝
+　　**被复制对象的所有值属性都含有与原来对象的相同，而所有的对象引用属性仍然指向原来的对象**。
+```java
+public static void main(String[] args) throws CloneNotSupportedException {
+    User user = new User();
+    user.setName("张三");
+    user.setAge(28);
+    user.setCert(new Cert(1));
+    User clone = (User) user.clone();
+
+    System.out.println(user == clone); // false
+    System.out.println(user.getName().equals(clone.getName())); // true
+    System.out.println(user.getAge().equals(clone.getAge())); // true
+    System.out.println(user.getCert() == clone.getCert()); // true
+    user.getCert().setNo(2);
+    System.out.println(clone.getCert().getNo()); // 2
+}
+```
+
+### 4.2、深拷贝
+　　**在浅拷贝的基础上，所有引用其他对象的变量也进行了clone，并指向被复制过的新对象**。
+```java
+public class Cert implements Cloneable {
+
+    private int no;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+
+public class User implements Cloneable {
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        User user = (User)super.clone();
+        Cert cert = (Cert)user.getCert().clone();
+        user.setCert(cert);
+        return user;
+    }
+}
+
+public static void main(String[] args) throws CloneNotSupportedException {
+    User user = new User();
+    user.setName("张三");
+    user.setAge(28);
+    user.setCert(new Cert(1));
+    User clone = (User) user.clone();
+
+    System.out.println(user == clone); // false
+    System.out.println(user.getName().equals(clone.getName())); // true
+    System.out.println(user.getAge().equals(clone.getAge())); // true
+    System.out.println(user.getCert() == clone.getCert()); // false
+    user.getCert().setNo(2);
+    System.out.println(clone.getCert().getNo()); // 1
+}
+```
+
+### 4.3、clone()的替代方案
+　　使用 clone() 方法来拷贝一个对象即复杂又有风险，它会抛出异常，并且还需要类型转换。Effective Java 书上讲到，最好不要去使用 clone()，可以使用拷贝构造函数或者拷贝工厂来拷贝一个对象。
+```java
+public HashMap(Map<? extends K, ? extends V> m) {
+    this.loadFactor = DEFAULT_LOAD_FACTOR;
+    putMapEntries(m, false);
+}
+```
+
+## 5、toString()
+　　将对象转为字符串，全类名@内存地址值的十六进制表现形式。该方法一般情况下都会被重写，重写完之后一般用于显示对象中成员变量的值。
+```java
+public String toString() {
+    return "User(name=" + this.getName() + ", age=" + this.getAge() + ")";
+}
+```
+
+## 6、notify()
+
+## 7、wait()
+
+## 8、finalize()
 
 十三、注解
 =================
